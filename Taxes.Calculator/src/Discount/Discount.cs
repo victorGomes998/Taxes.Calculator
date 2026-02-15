@@ -2,12 +2,9 @@ namespace Taxes.Calculator.Discount
 {
     public abstract class Discount
     {
-        protected Discount? Next { get; private set; }
+        protected Discount? Next { get; set; }
 
-        protected Discount(Discount? next)
-        {
-            Next = next;
-        }
+        public abstract Discount SetNext(Discount discount);
 
         public abstract decimal CalculateDiscount(Budget budget);
     }

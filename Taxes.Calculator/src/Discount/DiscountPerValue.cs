@@ -2,8 +2,10 @@ namespace Taxes.Calculator.Discount
 {
     public class DiscountPerValue : Discount
     {
-        public DiscountPerValue(Discount? next) : base(next)
+        public override Discount SetNext(Discount discount)
         {
+            Next = discount;
+            return discount;
         }
 
         public override decimal CalculateDiscount(Budget budget)
@@ -11,7 +13,10 @@ namespace Taxes.Calculator.Discount
             if (budget.Value > 500)
                 return budget.Value * 0.05m;
 
-            return Next!.CalculateDiscount(budget);
+            if (Next != null)
+                return Next.CalculateDiscount(budget);
+
+            return 0;
         }
     }
 }

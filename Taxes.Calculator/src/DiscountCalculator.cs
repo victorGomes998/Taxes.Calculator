@@ -6,11 +6,9 @@ namespace Taxes.Calculator
     {
         public static decimal CalculateDiscount(Budget budget)
         {
-            var discount = new DiscountPerValue(
-                new DiscountPerQtdItens(
-                    new NoDiscount()
-                )
-            );
+            var discount = new DiscountPerValue()
+                .SetNext(new DiscountPerQtdItens())
+                .SetNext(new DiscountPerDay());
             
             return discount.CalculateDiscount(budget);
         }

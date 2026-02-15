@@ -1,6 +1,6 @@
-namespace Taxes.Calculator.Discount
+namespace  Taxes.Calculator.Discount
 {
-    public class DiscountPerQtdItens : Discount
+    public class DiscountPerDay : Discount
     {
         public override Discount SetNext(Discount discount)
         {
@@ -10,10 +10,10 @@ namespace Taxes.Calculator.Discount
 
         public override decimal CalculateDiscount(Budget budget)
         {
-            if (budget.Qtditens > 5)
-                return budget.Value * 0.1m;
-                       
-             if (Next != null)
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+                return budget.Value * 0.15m;
+
+            if (Next != null)
                 return Next.CalculateDiscount(budget);
 
             return 0;
