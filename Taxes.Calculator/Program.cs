@@ -4,7 +4,7 @@ using Taxes.Calculator.Irrf;
 
 var budget = new Budget
 {
-   Value = 100m,
+   Value = 200m,
    Qtditens = 3
 };
 
