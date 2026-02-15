@@ -2,17 +2,16 @@ namespace Taxes.Calculator.Discount
 {
     public class DiscountPerQtdItens : Discount
     {
-        public override Discount SetNext(Discount discount)
+        public override void SetNext(Discount discount)
         {
             Next = discount;
-            return discount;
         }
 
         public override decimal CalculateDiscount(Budget budget)
         {
             if (budget.Qtditens > 5)
                 return budget.Value * 0.1m;
-                       
+            
              if (Next != null)
                 return Next.CalculateDiscount(budget);
 

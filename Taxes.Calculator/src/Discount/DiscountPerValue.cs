@@ -2,10 +2,9 @@ namespace Taxes.Calculator.Discount
 {
     public class DiscountPerValue : Discount
     {
-        public override Discount SetNext(Discount discount)
+        public override void SetNext(Discount discount)
         {
             Next = discount;
-            return discount;
         }
 
         public override decimal CalculateDiscount(Budget budget)

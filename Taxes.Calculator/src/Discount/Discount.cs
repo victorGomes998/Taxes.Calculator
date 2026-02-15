@@ -4,7 +4,7 @@ namespace Taxes.Calculator.Discount
     {
         protected Discount? Next { get; set; }
 
-        public abstract Discount SetNext(Discount discount);
+        public abstract void SetNext(Discount discount);
 
         public abstract decimal CalculateDiscount(Budget budget);
     }
