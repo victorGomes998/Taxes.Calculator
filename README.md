@@ -3,7 +3,7 @@ This repository was created to study some behavioral design patterns, such as:
 
 - [Strategy](#strategy)
 - [Chain of Responsability](#chain-of-responsability)
-- Template Method
+- [Template Method](#template-method)
 - State
 - Command
 - Observer
@@ -112,3 +112,53 @@ public class DiscountCalculator
     }
 }
 ```
+
+## Template Method
+<p align="justify">
+  The Template Method pattern is useful when multiple classes share the same overall algorithm but differ in specific implementation details. 
+  A common analogy is building a house: it will always have walls, doors, and windows, but the layout, proportions, and materials may vary.
+  The idea is to extract the common steps into a base class that defines the algorithm structure, while allowing subclasses to customize specific parts of the process.
+  
+  In this repository, the pattern is demonstrated using a tax type with two possible rates (maximum and minimum). 
+  The algorithm first determines which rate should be applied and then performs the tax calculation itself. 
+  
+  For this purpose, an abstract class <code>TaxWithTwoRates</code> was created, and the concrete tax classes inherit from it:
+</p>
+
+```c#
+public abstract class TaxWithTwoRates : ITaxes
+{
+    
+    public decimal Calculate(Budget budget)
+    {
+        if (ShouldUseMaxTax(budget))
+            return MaxTax(budget);
+
+        return MinTax(budget);
+    }
+
+    protected abstract bool ShouldUseMaxTax(Budget budget);
+    protected abstract decimal MaxTax(Budget budget);
+    protected abstract decimal MinTax(Budget budget);
+}
+```
+
+```c#
+public class Ikcv : TaxWithTwoRates
+{
+    protected override decimal MaxTax(Budget budget)
+    {
+        return budget.Value * 0.02m;
+    }
+
+    protected override decimal MinTax(Budget budget)
+    {
+        return budget.Value * 0.01m;
+    }
+
+    protected override bool ShouldUseMaxTax(Budget budget)
+    {
+        return budget.Value > 500 && budget.Qtditens > 3;
+    }
+}
+```  
