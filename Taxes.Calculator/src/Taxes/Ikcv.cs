@@ -1,6 +1,6 @@
 namespace Taxes.Calculator.Taxes
 {
-    public class Ikcv : TaxWithTwoRated
+    public class Ikcv : TaxWithTwoRates
     {
         protected override decimal MaxTax(Budget budget)
         {

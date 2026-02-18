@@ -1,6 +1,6 @@
 namespace Taxes.Calculator.Taxes
 {
-    public class Icpp : TaxWithTwoRated
+    public class Icpp : TaxWithTwoRates
     {
         protected override bool ShouldUseMaxTax(Budget budget)
         {

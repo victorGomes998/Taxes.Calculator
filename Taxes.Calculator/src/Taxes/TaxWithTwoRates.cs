@@ -1,6 +1,6 @@
 namespace Taxes.Calculator.Taxes
 {
-    public abstract class TaxWithTwoRated : ITaxes
+    public abstract class TaxWithTwoRates : ITaxes
     {
         
         public decimal Calculate(Budget budget)
