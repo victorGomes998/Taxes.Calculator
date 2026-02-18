@@ -1,7 +1,16 @@
+using Taxes.Calculator.GenerateOrderActions;
+
 namespace Taxes.Calculator.Command
 {
     public class GenerateOrderCommand
     {
+        private List<IOrderActions> _actions = [];
+
+        public void AddPostGenerationAction(IOrderActions action)
+        {
+            _actions.Add(action);
+        }
+
         public void GenerateOrder(string clientName, decimal budgetValue, int qtditens)
         {
             Budget budget = new Budget
@@ -17,8 +26,10 @@ namespace Taxes.Calculator.Command
                 Budget = budget
             };
 
-            Console.WriteLine("Saving in database...");
-            Console.WriteLine("Sending email...");  
+            foreach (var action in _actions)
+            {
+                action.Execute(order);
+            }
         }
     }
 }
