@@ -271,3 +271,82 @@ public class GenerateOrderCommand
 ```
 
 ## Observer
+<p align="justify">
+  The Observer pattern defines a one-to-many relationship between objects, where a change in one object (the publisher) automatically notifies its dependents (subscribers). 
+  It is useful when we want certain actions to occur in response to an event without tightly coupling the components involved.
+
+  For example, imagine subscribing to notifications for a product: you only go to the store when a new smartphone becomes available. 
+  In this case, you are the subscriber, and the store acts as the publisher that notifies all interested parties when its state changes.
+
+  Instead of manually invoking each action, the publisher simply maintains a list of subscribers and notifies them whenever an event occurs.
+
+  In this repository, the pattern is used to persist data and send a notification email after an order is created.   
+  For this purpose, a generic interface <code>IOrderActions</code> was introduced:
+</p>
+
+```c#
+public interface IOrderActions
+{
+    void Execute(Order order);
+}
+```
+<p align="justify">
+  And each Action just implements it:
+</p>
+
+```c#
+public class SendOrderEmailAction : IOrderActions
+{
+    public void Execute(Order order)
+    {
+        Console.WriteLine("Sending email...");  
+    }
+}
+```
+
+```c#
+public class SaveOrderInDbAction : IOrderActions
+{
+    public void Execute(Order order)
+    {
+        Console.WriteLine("Saving in database...");
+    }
+}
+```
+
+<p align="justify">
+  To make most use of this pattern, the <code>GenerateOrderCommand</code> class was refactored to use the Observer pattern:
+</p>
+
+```c#
+public class GenerateOrderCommand
+{
+    private List<IOrderActions> _actions = [];
+
+    public void AddPostGenerationAction(IOrderActions action)
+    {
+        _actions.Add(action);
+    }
+
+    public void GenerateOrder(string clientName, decimal budgetValue, int qtditens)
+    {
+        Budget budget = new Budget
+        {
+            Value = budgetValue,
+            Qtditens = qtditens
+        };
+
+        Order order = new Order
+        {
+            ClientName = clientName,
+            EndDate = DateTime.Now.AddDays(7),
+            Budget = budget
+        };
+
+        foreach (var action in _actions)
+        {
+            action.Execute(order);
+        }
+    }
+}
+```
