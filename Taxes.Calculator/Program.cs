@@ -3,6 +3,7 @@ using Taxes.Calculator.Command;
 using Taxes.Calculator.GenerateOrderActions;
 using Taxes.Calculator.Icms;
 using Taxes.Calculator.Irrf;
+using Taxes.Calculator.Adapter;
 
 // var budget = new Budget
 // {
@@ -22,12 +23,21 @@ using Taxes.Calculator.Irrf;
 // var result3 = DiscountCalculator.CalculateDiscount(budget);
 // Console.WriteLine($"Calculated discount: {result3}");
 
-string clientName = "John Doe";
-decimal budgetValue = 500m;
-int qtditens = 5;
+// string clientName = "John Doe";
+// decimal budgetValue = 500m;
+// int qtditens = 5;
 
-var command = new GenerateOrderCommand();
-command.AddPostGenerationAction(new SaveOrderInDbAction());
-command.AddPostGenerationAction(new SendOrderEmailAction());
-command.AddPostGenerationAction(new SaveOrderLogsAction());
-command.GenerateOrder(clientName, budgetValue, qtditens);
+// var command = new GenerateOrderCommand();
+// command.AddPostGenerationAction(new SaveOrderInDbAction());
+// command.AddPostGenerationAction(new SendOrderEmailAction());
+// command.AddPostGenerationAction(new SaveOrderLogsAction());
+// command.GenerateOrder(clientName, budgetValue, qtditens);
+
+var register = new RegisterBudget(new HttpClientAdapter());
+var budget = new Budget
+{
+    Value = 300m,
+    Qtditens = 4
+};
+var response = await register.RegisterAsync(budget);
+Console.WriteLine(response);
