@@ -1,12 +1,16 @@
-# Objective
-This repository was created to study some behavioral design patterns, such as:
+## Objective
+This repository was created to study some design patterns, such as:
 
+### Behavioral
 - [Strategy](#strategy)
 - [Chain of Responsability](#chain-of-responsability)
 - [Template Method](#template-method)
 - [State](#state)
 - [Command](#command)
 - [Observer](#observer)
+
+### Structural 
+- [Adapter](#adapter)
 
 Reference used: https://refactoring.guru/
 
@@ -270,7 +274,7 @@ public class GenerateOrderCommand
 }
 ```
 
-## Observer
+### Observer
 <p align="justify">
   The Observer pattern defines a one-to-many relationship between objects, where a change in one object (the publisher) automatically notifies its dependents (subscribers). 
   It is useful when we want certain actions to occur in response to an event without tightly coupling the components involved.
@@ -350,3 +354,69 @@ public class GenerateOrderCommand
     }
 }
 ```
+
+### Adapter
+<p align="justify">
+  The Adapter pattern allows incompatible interfaces to work together by introducing an intermediate layer that converts one interface into another.
+
+  For example, imagine you have different data sources for a <code>Budget</code>, such as JSON and Excel files. 
+  Since each format requires a different way of reading the data, you cannot use the same code for both.
+
+  To solve this, you can define a common interface (<code>IAdapter</code>) and implement specific adapters such as <code>JsonAdapter</code> and <code>ExcelAdapter</code>. 
+  Each adapter knows how to read its respective source while exposing the same interface to the rest of the system.
+
+  This way, the caller doesn't need to worry about the underlying data source — it simply interacts with the adapter interface.
+
+  In this repository, this pattern is used to represent different ways of making HTTP requests, with multiple implementations of the <code>IHttpAdapter</code> interface.
+</p>
+
+```c#
+public interface IHttpAdapter
+{
+    Task<string> PostAsync(string url, object data);
+}
+```
+
+```c#
+public class HttpClientAdapter : IHttpAdapter
+{
+    private readonly HttpClient _httpClient = new HttpClient();
+
+    public async Task<string> PostAsync(string url, object data)
+    {
+        var jsonData = JsonSerializer.Serialize(data);
+        var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync(url, content);
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadAsStringAsync();
+    }
+}
+```
+
+```c#
+public class IdentityWebAdapter : IHttpAdapter
+{
+    public async Task<string> PostAsync(string url, object data)
+    {
+        return await Task.FromResult($"Simulated response for URL: {url} with data: {data}");
+    }
+}
+```
+<p align="justify">
+  The caller only needs to know which one to use
+</p>
+
+```c#
+var register = new RegisterBudget(new HttpClientAdapter());
+```
+
+<p align="justify">
+  Or
+</p>
+
+```c#
+var register = new RegisterBudget(new IdentityWebAdapter());
+```
+
