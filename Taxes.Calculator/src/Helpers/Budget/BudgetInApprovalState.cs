@@ -1,4 +1,4 @@
-namespace Taxes.Calculator.Aux.Budget
+namespace Taxes.Calculator.Helpers.Budget
 {
     public class BudgetInApprovalState : BudgetState
     {
