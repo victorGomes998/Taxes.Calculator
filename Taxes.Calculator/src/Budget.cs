@@ -1,4 +1,4 @@
-using Taxes.Calculator.Aux.Budget;
+using Taxes.Calculator.Helpers.Budget;
 
 namespace Taxes.Calculator
 {
